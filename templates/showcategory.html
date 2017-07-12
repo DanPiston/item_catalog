@@ -1,0 +1,13 @@
+<html>
+    <body>
+        <h1>{{category.name}}</h1>
+        <p><a href="{{url_for('newItem', category_id=category.id)}}">Create New Item</a></p>
+
+        <h2>Items</h2>
+        {% for item in items %}
+        <p>{{item.name}}</p>
+        {% endfor %}
+
+        <a href="{{url_for('showCatalog')}}">Back to Catalog</a>
+    </body>
+</html>

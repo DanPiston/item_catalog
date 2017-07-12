@@ -56,25 +56,27 @@ def deleteCategory(category_id):
 #Display category
 @app.route('/category/<int:category_id>/')
 def showCategory(category_id):
-    return "Showing {}".format(category_id)
+    category = session.query(Category).filter_by(id=category_id).one()
+    items = session.query(Item).filter_by(category_id=category_id)
+    return render_template('showcategory.html', category=category, items=items)
 
 #Create new item
-@app.route('/item/new/')
-def newItem():
+@app.route('/category/<int:category_id>/item/new/')
+def newItem(category_id):
     return 'Create new item here'
 
 #Edit item
-@app.route('/item/<int:item_id>/edit')
+@app.route('/category/<int:category_id>/item/<int:item_id>/edit')
 def editItem(item_id):
     return 'Editing {}'.format(item_id)
 
 #Delete item
-@app.route('/item/<int:item_id>/delete')
+@app.route('/category/<int:category_id>/item/<int:item_id>/delete')
 def deleteItem(item_id):
     return 'Deleting {}'.format(item_id)
 
 #Show item
-@app.route('/item/<int:item_id>/')
+@app.route('/category/<int:category_id>/item/<int:item_id>/')
 def showItem(item_id):
     return 'Showing {}'.format(item_id)
 
