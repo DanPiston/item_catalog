@@ -5,7 +5,7 @@
 
         <h2>Items</h2>
         {% for item in items %}
-        <p>{{item.name}}</p>
+        <a href="{{url_for('showItem', item_id=item.id, category_id=category.id)}}"><h3>{{item.name}}</h3></a>
         {% endfor %}
 
         <a href="{{url_for('showCatalog')}}">Back to Catalog</a>
