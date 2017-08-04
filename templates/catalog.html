@@ -1,12 +1,39 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/styles.css') }}">
+
     <body>
-        <a href="{{ url_for('newCategory')}}">Create a new Category</a>
-        <h1> Categories </h1>
-        {% for category in categories %}
-        <h3><a href="{{ url_for('showCategory', category_id=category.id)}}">{{category.name}}</a></h3>
-        <p><a href="{{url_for('editCategory', category_id=category.id)}}">Edit Name</a></p>
-        <p><a href="{{url_for('deleteCategory', category_id=category.id)}}">Delete Category</a></p>
-        </br>
-        {% endfor %}
+        <div class="big">
+            <div class="navbar-header">
+                <div class="navbar-brand">
+                    <h3><a href="#">Item Catalog</a></h3>
+                </div>
+                <div class="login">
+                    <a href="#">Log In</a>
+                </div>
+            </div>
+            <div class="body">
+                <div class="catagory">
+                    <a href="{{ url_for('newCategory')}}">Create a new Category</a>
+                    <ul class="nav nav-sidebar">
+                        <li class="active"><h2>Categories</h2></li>
+                        {% for category in categories %}
+                        <li><a href="{{ url_for('showCategory', category_id=category.id)}}"><h4>{{category.name}}</h4></a></li>
+                        <p><a href="{{url_for('editCategory', category_id=category.id)}}">Edit Name</a></p>
+                        <p><a href="{{url_for('deleteCategory', category_id=category.id)}}">Delete Category</a></p>
+                        {% endfor %} 
+                    </ul>
+                    </div>
+                <div class="block">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
     </body>
+
 </html>
