@@ -13,7 +13,11 @@
                     <h3><a href="#">Item Catalog</a></h3>
                 </div>
                 <div class="login">
-                    <a href="{{ url_for('showLogin')}}">Log In</a>
+                    {% if 'username' in login_session %}
+                        Yo, {{ login_session['username'] }}, <a href="{{ url_for('gdisconnect')}}">Log out MFer</a>
+                    {% else %}
+                        <a href="{{ url_for('showLogin')}}">Log In</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="body">

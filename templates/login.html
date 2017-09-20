@@ -1,19 +1,11 @@
-<html>
-<head>
+{% extends "catalog.html" %}
+{% block content %}
 
-  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
   </script>
 
 <script src="//apis.google.com/js/platform.js?onload=start"> </script>
-
-<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
-
-
-</head>
-
-
-<body>  
 
 
 <!-- GOOGLE PLUS SIGN IN BUTTON-->
@@ -67,11 +59,4 @@ function signInCallback(authResult) {
       
   }); } }
 </script>
-
-
-
-<!--END GOOGLE PLUS SIGN IN BUTTON -->
-
-  </body>
-
-  </html>
+{% endblock %}

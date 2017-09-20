@@ -81,7 +81,7 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    stored_credentials = login_session.get('credentials')
+    stored_credentials = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_credentials is not None and gplus_id == stored_gplus_id:
         response = make_response(json.dumps('Current user is already connected.'),
@@ -90,7 +90,7 @@ def gconnect():
         return response
 
     # Store the access token in the session for later use.
-    login_session['credentials'] = credentials
+    login_session['access_token'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
 
     # Get user info
@@ -120,12 +120,12 @@ def gconnect():
 #Revoke the current user's token and reset the session
 @app.route('/gdisconnect')
 def gdisconnect():
-    credentials = login_session['credentials']
-    print(credentials)
-    print 'In gdisconnect access token is %s', credentials
+    access_token = login_session['access_token']
+    print(access_token)
+    print 'In gdisconnect access token is %s', access_token
     print 'User name is: ' 
     print login_session['username']
-    if credentials is None:
+    if access_token is None:
  	print 'Access Token is None'
     	response = make_response(json.dumps('Current user not connected.'), 401)
     	response.headers['Content-Type'] = 'application/json'
@@ -143,7 +143,8 @@ def gdisconnect():
     	del login_session['picture']
     	response = make_response(json.dumps('Successfully disconnected.'), 200)
     	response.headers['Content-Type'] = 'application/json'
-    	return response
+    	print(response)
+        return redirect(url_for('showCatalog'))
     else:
 	
     	response = make_response(json.dumps('Failed to revoke token for given user.', 400))
@@ -154,8 +155,20 @@ def gdisconnect():
 #API Endpoint for Catalog (GET Request)
 @app.route('/catalog/JSON')
 def catalogJSON():
-    categories = session.query(Category).all()
-    return jsonify(Category=[i.serialize for i in categories])
+    categories = session.query(Category).order_by(Category.name.asc()).all()
+    sCats = []
+    for c in categories:
+        cat = c.serialize
+        items = session.query(Item).filter(Item.category_id == c.id).all()
+        sItems = []
+        for i in items:
+            sItems.append(i.serialize)
+        cat['items'] = sItems
+        sCats.append(cat)
+    return jsonify(categories = [sCats])
+# def catalogJSON():
+#     categories = session.query(Category).all()
+#     return jsonify(Category=[i.serialize for i in categories])
 
 #API Endpoint for Items in a Category (GET Requst)
 @app.route('/catalog/category/<int:category_id>/JSON')
@@ -168,7 +181,7 @@ def categoryJSON(category_id):
 @app.route('/catalog/')
 def showCatalog():
     categories = session.query(Category).all()
-    return render_template('catalog.html', categories = categories)
+    return render_template('catalog.html', categories = categories, login_session=login_session)
     # return "Whole catalog here"
 
 #Create new category
