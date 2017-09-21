@@ -1,5 +1,5 @@
-<html>
-    <body>
+{% extends "catalog.html" %}
+{% block content %}
         <h1>Create New Item</h1>
 
         <form action="{{url_for('newItem', category_id=category_id)}}" method="POST">
@@ -9,5 +9,4 @@
             <input type="text" size="50" name="description">
             <input type="submit" value="Create">
         </form>
-    </body>
-</html>
+{% endblock %}

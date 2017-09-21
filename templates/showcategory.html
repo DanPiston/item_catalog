@@ -1,5 +1,5 @@
-<html>
-    <body>
+{% extends "catalog.html" %}
+{% block content %}
         <h1>{{category.name}}</h1>
         <p><a href="{{url_for('newItem', category_id=category.id)}}">Create New Item</a></p>
 
@@ -9,5 +9,4 @@
         {% endfor %}
 
         <a href="{{url_for('showCatalog')}}">Back to Catalog</a>
-    </body>
-</html>
+{% endblock %}
