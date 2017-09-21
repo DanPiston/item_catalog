@@ -14,7 +14,7 @@
                 </div>
                 <div class="login">
                     {% if 'username' in login_session %}
-                        Yo, {{ login_session['username'] }}, <a href="{{ url_for('gdisconnect')}}">Log out MFer</a>
+                        {{ login_session['username'] }}, <a href="{{ url_for('gdisconnect')}}">Click Here to Logout</a>
                     {% else %}
                         <a href="{{ url_for('showLogin')}}">Log In</a>
                     {% endif %}
@@ -22,16 +22,9 @@
             </div>
             <div class="body">
                 <div class="catagory">
-                    <a href="{{ url_for('newCategory')}}">Create a new Category</a>
-                    <ul class="nav nav-sidebar">
-                        <li class="active"><h2>Categories</h2></li>
-                        {% for category in categories %}
-                        <li><a href="{{ url_for('showCategory', category_id=category.id)}}"><h4>{{category.name}}</h4></a></li>
-                        <p><a href="{{url_for('editCategory', category_id=category.id)}}">Edit Name</a></p>
-                        <p><a href="{{url_for('deleteCategory', category_id=category.id)}}">Delete Category</a></p>
-                        {% endfor %} 
-                    </ul>
-                    </div>
+                    {% block sidebar %}
+                    {% endblock %}
+                </div>
                 <div class="block">
                     {% block content %}
                     {% endblock %}

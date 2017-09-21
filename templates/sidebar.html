@@ -1,0 +1,18 @@
+{% extends "catalog.html" %} 
+{% block sidebar %}
+    <a href="{{ url_for('newCategory')}}">Create a new Category</a>
+    <ul class="nav nav-sidebar">
+        <li class="active">
+            <h2>Categories</h2>
+        </li>
+        {% for category in categories %}
+        <li>
+            <a href="{{ url_for('showCategory', category_id=category.id)}}">
+                <h4>{{category.name}}</h4>
+            </a>
+        </li>
+        <p><a href="{{url_for('editCategory', category_id=category.id)}}">Edit Name</a></p>
+        <p><a href="{{url_for('deleteCategory', category_id=category.id)}}">Delete Category</a></p>
+        {% endfor %}
+    </ul>
+{% endblock %}

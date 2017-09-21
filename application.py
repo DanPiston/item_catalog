@@ -115,7 +115,6 @@ def gconnect():
     print "done!"
     return output
 
-#TODO figure out how to make this work
 
 #Revoke the current user's token and reset the session
 @app.route('/gdisconnect')
