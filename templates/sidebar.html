@@ -1,13 +1,11 @@
 {% block sidebar %}
     <a href="{{ url_for('newCategory')}}">Create a new Category</a>
     <ul class="nav nav-sidebar">
-        <li class="active">
             <h2>Categories</h2>
-        </li>
         {% for category in categories %}
         <li>
             <a href="{{ url_for('showCategory', category_id=category.id)}}">
-                <h4>{{category.name}}</h4>
+                <span class="cat-name">{{category.name}}</span>
             </a>
         </li>
         <p><a href="{{url_for('editCategory', category_id=category.id)}}">Edit Name</a></p>

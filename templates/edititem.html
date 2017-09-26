@@ -1,11 +1,18 @@
 {% extends "catalog.html" %}
 {% block content %}
         <h1>Edit {{item.name}}</h1>
-        <form action="{{url_for('editItem', item_id=item.id, category_id=category_id)}}" method="POST">
+        <form action="{{url_for('editItem', item_id=item.id, category_id=category_id)}}" method="POST" style="text-align:center;">
+            <div class="itemname">
             <p>Name</p>
             <input type="text" size="30" name="name" placeholder="{{item.name}}">
+            </div>
+            <div class="itemdescription">
+            <p>Description</p> 
             <input type="text" size="50" name="description" placeholder="{{item.description}}">
-            <input type="submit" value="Update">
+            </div>
+            <div class="buttons">
+            <input type="submit" value="Update" id="create">
+            <a href="{{url_for('showCategory', category_id=category_id)}}" class="btncan">Cancel</a>
+            </div>
         </form>
-        <a href="{{url_for('showCategory', category_id=category_id)}}">Cancel</a>
 {% endblock %}

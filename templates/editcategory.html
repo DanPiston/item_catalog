@@ -4,7 +4,7 @@
         <form action="{{url_for('editCategory', category_id=category_id)}}" method="post">
             <p>Name</p>
             <input type="text" size="30" name="name" placeholder="{{category.name}}">
-            <input type="submit" value="Update">
-            <a href="{{url_for('showCatalog')}}">Cancel</a>
+            <input type="submit" value="Update" id="create">
+            <a href="{{url_for('showCatalog')}}" class="btncan">Cancel</a>
         </form>
 {% endblock %}

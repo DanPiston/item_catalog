@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=BioRhyme|Nunito" rel="stylesheet">
+    
 
     <body>
         <div class="big">
@@ -14,7 +16,7 @@
                 </div>
                 <div class="login">
                     {% if 'username' in login_session %}
-                        {{ login_session['username'] }}, <a href="{{ url_for('gdisconnect')}}">Click Here to Logout</a>
+                        <a href="{{ url_for('gdisconnect')}}">Logout</a>
                     {% else %}
                         <a href="{{ url_for('showLogin')}}">Log In</a>
                     {% endif %}

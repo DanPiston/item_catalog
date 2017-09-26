@@ -1,10 +1,16 @@
 {% extends "catalog.html" %}
 {% block content %}
-        <h1>Are you sure you want to delete {{item.name}}?</h1>
+        <div class="deleteprompt">
+        <h2>Are you sure you want to delete {{item.name}}?</h2>
+        </div>
 
-        <form action="{{url_for('deleteItem', category_id=category_id, item_id=item.id)}}" method="POST">
-            <input type="submit" value="Delete Forever">
+        <div>
+        <form action="{{url_for('deleteItem', category_id=category_id, item_id=item.id)}}" method="POST" style="text-align:center;">
+            <input type="submit" value="Delete Forever" id="delete">
         </form>
+        </div>
 
-        <a href="{{url_for('showCategory', category_id=category_id)}}">Cancel</a>
+        <div class="cancel">
+        <a class="btncan" href="{{url_for('showCategory', category_id=category_id)}}">Cancel</a>
+        </div>
 {% endblock %}
