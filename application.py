@@ -7,7 +7,8 @@ from oauth2client.client import FlowExchangeError
 import requests
 
 from flask import make_response
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
+from flask import Flask, render_template, request, redirect, \
+                  url_for, jsonify, flash
 from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -37,6 +38,9 @@ def showLogin():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """
+    Gathers data from Google to create a session variable.
+    """
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
@@ -87,8 +91,8 @@ def gconnect():
     stored_credentials = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_credentials is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(json.dumps('Current user is \
+                                            already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -113,7 +117,9 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 100px; height: 100px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 100px; height: 100px;border-radius: 150px; \
+                           -webkit-border-radius: 150px; \
+                           -moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -122,6 +128,9 @@ def gconnect():
 # Revoke the current user's token and reset the session
 @app.route('/gdisconnect')
 def gdisconnect():
+    """
+    Removes the session.
+    """
     access_token = login_session['access_token']
     print(access_token)
     print 'In gdisconnect access token is %s', access_token
@@ -133,7 +142,8 @@ def gdisconnect():
                 json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' \
+          % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     print 'result is '
@@ -157,6 +167,9 @@ def gdisconnect():
 # API Endpoint for Catalog (GET Request)
 @app.route('/catalog/JSON')
 def catalogJSON():
+    """
+    Returns full response with all categories and items.
+    """
     categories = session.query(Category).order_by(Category.name.asc()).all()
     sCats = []
     for c in categories:
@@ -168,14 +181,14 @@ def catalogJSON():
         cat['items'] = sItems
         sCats.append(cat)
     return jsonify(categories=[sCats])
-# def catalogJSON():
-#     categories = session.query(Category).all()
-#     return jsonify(Category=[i.serialize for i in categories])
 
 
 # API Endpoint for Items in a Category (GET Requst)
 @app.route('/catalog/category/<int:category_id>/JSON')
 def categoryJSON(category_id):
+    """
+    Retuns specific items.
+    """
     items = session.query(Item).filter_by(category_id=category_id).all()
     return jsonify(Item=[i.serialize for i in items])
 
@@ -184,6 +197,9 @@ def categoryJSON(category_id):
 @app.route('/')
 @app.route('/catalog/')
 def showCatalog():
+    """
+    Displays main page
+    """
     categories = session.query(Category).all()
     return render_template('catalog.html', categories=categories,
                            login_session=login_session)
@@ -193,6 +209,9 @@ def showCatalog():
 # Create new category
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
+    """
+    Creates a new category.
+    """
     categories = session.query(Category).all()
     if 'username' in login_session:
         if request.method == 'POST':
@@ -209,6 +228,9 @@ def newCategory():
 # Edit category
 @app.route('/category/<int:category_id>/edit/', methods=['POST', 'GET'])
 def editCategory(category_id):
+    """
+    Edits a category's information.
+    """
     categories = session.query(Category).all()
     editedCat = session.query(Category).filter_by(id=category_id).one()
     if 'username' in login_session:
@@ -230,6 +252,9 @@ def editCategory(category_id):
 # Delete category
 @app.route('/category/<int:category_id>/delete/', methods=['GET', 'POST'])
 def deleteCategory(category_id):
+    """
+    Deletes a Category.
+    """
     categories = session.query(Category).all()
     deleteItems = session.query(Item).filter_by(category_id=category_id).all()
     deletedCat = session.query(Category).filter_by(id=category_id).one()
@@ -254,6 +279,9 @@ def deleteCategory(category_id):
 # Display category
 @app.route('/category/<int:category_id>/')
 def showCategory(category_id):
+    """
+    Shows a specific category based in the id passed.
+    """
     categories = session.query(Category).all()
     category = session.query(Category).filter_by(id=category_id).one()
     items = session.query(Item).filter_by(category_id=category_id)
@@ -265,6 +293,9 @@ def showCategory(category_id):
 # Create new item
 @app.route('/category/<int:category_id>/item/new/', methods=['GET', 'POST'])
 def newItem(category_id):
+    """
+    Creates a new item.
+    """
     categories = session.query(Category).all()
     if 'username' in login_session:
         if request.method == "POST":
@@ -289,6 +320,9 @@ def newItem(category_id):
 @app.route('/category/<int:category_id>/item/<int:item_id>/edit',
            methods=['POST', 'GET'])
 def editItem(item_id, category_id):
+    """
+    Edits an items properties.
+    """
     categories = session.query(Category).all()
     editedItem = session.query(Item).filter_by(id=item_id).one()
     if 'username' in login_session:
@@ -312,6 +346,9 @@ def editItem(item_id, category_id):
 @app.route('/category/<int:category_id>/item/<int:item_id>/delete',
            methods=['POST', 'GET'])
 def deleteItem(item_id, category_id):
+    """
+    Deletes an item.
+    """
     deletedItem = session.query(Item).filter_by(id=item_id).one()
     categories = session.query(Category).all()
     if 'username' in login_session:
@@ -330,6 +367,9 @@ def deleteItem(item_id, category_id):
 # Show item
 @app.route('/category/<int:category_id>/item/<int:item_id>/')
 def showItem(item_id, category_id):
+    """
+    Shows a specific item based on the id.
+    """
     categories = session.query(Category).all()
     item = session.query(Item).filter_by(id=item_id).one()
     return render_template('showitem.html', category_id=category_id,
